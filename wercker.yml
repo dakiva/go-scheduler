@@ -1,0 +1,26 @@
+box: golang:1.7
+
+# Build definition
+build:
+  # The steps that will be executed on build
+  steps:
+    - setup-go-workspace
+
+    # Gets the public dependencies
+    - script:
+        name: go get
+        code: |
+         go get -t ./...
+
+    # Build the project
+    - script:
+        name: go install
+        code: |
+          go version
+          go install ./...
+
+    # Test the project
+    - script:
+        name: go test
+        code: |
+          go test ./...

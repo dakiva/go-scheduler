@@ -34,7 +34,7 @@ This talk is going to be heavily code-based. Questions, comments, criticisms wel
 * Requirements
 
 - Attempt to provide a simple pattern for defining, managing and reporting on long running asynchronous tasks.
-- Report on status, error conditions, and timing.
+- Report on status, failures, and timing.
 
 * Before we dive in, lets define a few key words and look at some early samples.
 

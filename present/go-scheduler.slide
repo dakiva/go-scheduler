@@ -1,0 +1,103 @@
+go-scheduler
+A Go library to manage and report on concurrent routines.
+24 Aug 2017
+Tags: go, channels, scheduling
+
+Daniel Akiva
+CTO, HomDNA Inc.
+dakiva@gmail.com
+@dakiva
+
+* Agenda
+
+This talk is going to be heavily code-based. Questions, comments, criticisms welcome!
+
+- Rationale for writing a managed concurrency library.
+- Code Example: Initial test code
+- Code Example: Initial test code - evolved
+- Code Example: go-scheduler
+
+.image images/keyboard.png _ 450
+
+
+* Concurrency
+
+- Concurrency in Go is elegant and simple
+- To run a function concurrently prepend the `go` keyword to a function.
+- Channels make it straightforward to converse between concurrently running goroutines.
+
+* Managed concurrency
+
+- What if I want to know whether a long running routine actually ran, is still running, or if it aborted?
+- What about restricting the number of concurrent routines that can run for a specific purpose?
+
+* Problem statement
+
+- Attempt to provide a simple pattern for defining, managing and reporting on long running asynchronous tasks.
+- Full reporting includes reporting on status and error conditions.
+- Before we dive in, lets define a few key words and look at some early samples.
+
+* Pool
+
+- A constrained, managed set of resources that are kept ready for use. This can be a set of database connections, large objects, file handles, etc. In our case we are going to manage goroutines.
+
+- A worker is simply a routine running concurrently that executes a unit of work and can report status.
+- A pool can be easily backed by a buffered channel
+
+
+* Pool example - main
+.play -edit pool/main.go /func main/,
+
+* Pool example - worker
+.code pool/main.go /func worker/,17
+
+* Workers Evolved (Slightly)
+
+- We were able to constrain the set of workers in the initial example, but the workers ran a very specific routine.
+- The next example expands on the first, allowing for constrained executions of an arbitrary function.
+
+.code worker/main.go /funcExecutor/,15
+
+* Workers Evolved - main
+.play -edit worker/main.go /func main/,
+
+* Scheduler: Tasks and Jobs (Workers Evolved)
+- Workers have been incorporated into a Task which encapsulates the data and underlying routine that can be execetued.
+- A Job has been introduced that uniquely identifies and stores metadata regarding a specific execution of a Task.
+- Scheduler - The primary interaction point - where everything is put together. A scheduler scontains an underlying repository for storing job metadata and an executor strategy that decides on how jobs are executed.
+- Executor - A strategy for executing tasks. The default executor pulls all jobs in order and executes them. (Leaky Abstraction)
+
+.image images/scheduler_diagram.jpg _ 550
+
+* Task
+.code ../task.go /type Task/,/}/
+.code ../task.go /Execute/,
+
+* Job
+.code ../job.go /type Job/,/}/
+.code ../job.go /Start\(\)/,/}/
+
+* Scheduler
+
+.code ../scheduler.go /func NewCustomScheduler/,55
+
+* Scheduler functions
+
+.code ../scheduler.go /ScheduleNow/,
+
+* Executor
+
+.code ../executor.go /type Executor/,
+.code ../job_repository.go /type JobRepository/,/}/
+
+* Enhancements
+
+- Priority queuing
+- Restarting/requeuing/aborting an execution
+- Fix Executor strategy to better hide execution details, or remove altogether
+
+.image images/flying.png
+
+* Links
+
+The sample library and this slide deck are available on [[https://github.com/dakiva/go-scheduler][GitHub]]

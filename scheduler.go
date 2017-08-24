@@ -32,19 +32,18 @@ func NewScheduler() *Scheduler {
 }
 
 func NewCustomScheduler(numExecutors int, repository JobRepository, executorStrategy Executor) *Scheduler {
+	if numExecutors <= 0 {
+		numExecutors = DEFAULT_NUM_EXECUTORS
+	}
 	scheduler := &Scheduler{
 		repository: repository,
 	}
-	scheduler.jobChan, scheduler.jobStatusChan = make(chan Job), make(chan Job)
+	scheduler.jobChan, scheduler.jobStatusChan = make(chan Job, numExecutors), make(chan Job, numExecutors)
 	go func() {
 		for job := range scheduler.jobStatusChan {
 			scheduler.repository.Save(job)
 		}
 	}()
-
-	if numExecutors <= 0 {
-		numExecutors = DEFAULT_NUM_EXECUTORS
-	}
 
 	for i := 0; i < numExecutors; i++ {
 		go func() {
@@ -71,9 +70,9 @@ func (s *Scheduler) Schedule(task *Task, scheduledOn time.Time) *Job {
 	}
 	job := NewJob(task, scheduledOn)
 	s.repository.Save(job)
+	// TODO handle error on save
 	go func() {
 		time.Sleep(scheduledOn.Sub(time.Now()))
-		// TODO handle error on save
 		s.jobChan <- job
 	}()
 	return &job

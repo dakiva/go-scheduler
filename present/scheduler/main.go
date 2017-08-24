@@ -16,24 +16,23 @@ func main() {
 	futureJobIDs := make([]string, 0)
 	currentJobIDs := make([]string, 0)
 	for i := 0; i < 5; i++ {
-		cp := i
+		var job scheduler.Job
 		testTask, _ := scheduler.NewTask("test task", func() {
-			fmt.Println("Running a future task #", cp)
+			fmt.Println("Running a future task #", job.ID)
 		}, nil)
-		job, _ := s.Schedule(testTask, future)
+		job, _ = s.Schedule(testTask, future)
 		futureJobIDs = append(futureJobIDs, job.ID)
 	}
 	for i := 5; i < 15; i++ {
 		var job scheduler.Job
-		cp := i
 		if i%4 != 0 {
 			testTask, _ := scheduler.NewTask("test task", func() {
-				fmt.Println("Running a task #", cp)
+				fmt.Println("Running a task #", job.ID)
 			}, nil)
 			job, _ = s.ScheduleNow(testTask)
 		} else {
 			failedTestTask, _ := scheduler.NewTask("test failed task", func() error {
-				fmt.Println("Running a failed task #", cp)
+				fmt.Println("Running a failed task #", job.ID)
 				return errors.New("Error")
 			}, nil)
 			job, _ = s.ScheduleNow(failedTestTask)

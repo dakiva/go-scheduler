@@ -93,7 +93,17 @@ This talk is going to be heavily code-based. Questions, comments, criticisms wel
 
 * Lets see it in action
 
-.play -edit ./scheduler/main.go /func main/,/Sleep/
+Initial setup
+
+	s := scheduler.NewScheduler()
+	defer s.Destroy()
+	future := time.Now().Add(3 * time.Second)
+	futureJobIDs := make([]string, 0)
+	currentJobIDs := make([]string, 0)
+
+* Scheduling
+
+.play -edit ./scheduler/main.go /for i/,41
 
 * Enhancements
 

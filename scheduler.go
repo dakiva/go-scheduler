@@ -14,11 +14,16 @@
 
 package scheduler
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 const (
-	DEFAULT_NUM_EXECUTORS = 5
+	DefaultNumExecutors = 5
 )
+
+var JobNotFound error = errors.New("Job not found")
 
 type Scheduler struct {
 	repository JobRepository
@@ -28,12 +33,12 @@ type Scheduler struct {
 }
 
 func NewScheduler() *Scheduler {
-	return NewCustomScheduler(DEFAULT_NUM_EXECUTORS, NewInMemoryJobRepository(), DefaultExecutor)
+	return NewCustomScheduler(DefaultNumExecutors, NewInMemoryJobRepository(), DefaultExecutor)
 }
 
 func NewCustomScheduler(numExecutors int, repository JobRepository, executorStrategy Executor) *Scheduler {
 	if numExecutors <= 0 {
-		numExecutors = DEFAULT_NUM_EXECUTORS
+		numExecutors = DefaultNumExecutors
 	}
 	scheduler := &Scheduler{
 		repository: repository,
@@ -53,36 +58,41 @@ func NewCustomScheduler(numExecutors int, repository JobRepository, executorStra
 	return scheduler
 }
 
-func (s *Scheduler) ScheduleNow(task *Task) *Job {
+func (s *Scheduler) ScheduleNow(task *Task) (Job, error) {
 	if task == nil {
-		return nil
+		return Job{}, errors.New("Task was empty")
 	}
 	job := NewJob(task, time.Now())
-	s.repository.Save(job)
-	// TODO handle error on save
+	if err := s.repository.Save(job); err != nil {
+		return Job{}, err
+	}
 	s.jobChan <- job
-	return &job
+	return job, nil
 }
 
-func (s *Scheduler) Schedule(task *Task, scheduledOn time.Time) *Job {
-	if task == nil || time.Now().After(scheduledOn) {
-		return nil
+func (s *Scheduler) Schedule(task *Task, scheduledOn time.Time) (Job, error) {
+	if task == nil {
+		return Job{}, errors.New("Task was empty")
+	}
+	if time.Now().After(scheduledOn) {
+		return Job{}, errors.New("Schedule time is in the past")
 	}
 	job := NewJob(task, scheduledOn)
-	s.repository.Save(job)
-	// TODO handle error on save
+	if err := s.repository.Save(job); err != nil {
+		return Job{}, err
+	}
 	go func() {
 		time.Sleep(scheduledOn.Sub(time.Now()))
 		s.jobChan <- job
 	}()
-	return &job
+	return job, nil
 }
 
-func (s *Scheduler) JobStatus(jobID string) *Job {
+func (s *Scheduler) JobStatus(jobID string) (Job, error) {
 	if job, err := s.repository.Load(jobID); err == nil {
-		return &job
+		return job, nil
 	}
-	return nil
+	return Job{}, JobNotFound
 }
 
 func (s *Scheduler) Destroy() {

@@ -39,13 +39,17 @@ func TestDefaultScheduler(t *testing.T) {
 	assert.NoError(t, err)
 
 	// when
-	job := s.ScheduleNow(testTask)
-	job2 := s.ScheduleNow(failedTestTask)
+	job, err := s.ScheduleNow(testTask)
+	assert.NoError(t, err)
+	job2, err := s.ScheduleNow(failedTestTask)
+	assert.NoError(t, err)
 
 	time.Sleep(2 * time.Second)
 
-	completedJob := s.JobStatus(job.ID)
-	failedJob := s.JobStatus(job2.ID)
+	completedJob, err := s.JobStatus(job.ID)
+	assert.NoError(t, err)
+	failedJob, err := s.JobStatus(job2.ID)
+	assert.NoError(t, err)
 
 	// then
 	assert.Equal(t, SCHEDULED_STATUS, job.Status)

@@ -23,7 +23,7 @@ func main() {
 		job, _ := s.Schedule(testTask, future)
 		futureJobIDs = append(futureJobIDs, job.ID)
 	}
-	for i := 0; i < 10; i++ {
+	for i := 5; i < 15; i++ {
 		var job scheduler.Job
 		cp := i
 		if i%4 != 0 {

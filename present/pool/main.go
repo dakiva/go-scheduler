@@ -23,7 +23,7 @@ func main() {
 		links[i] = fmt.Sprintf("%d", i+1)
 	}
 
-	linkChan := make(chan string, 10)
+	linkChan := make(chan string, 10) // HL123
 	wg := new(sync.WaitGroup)
 
 	for i := 0; i < 10; i++ {

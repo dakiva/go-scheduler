@@ -31,11 +31,12 @@ This talk is going to be heavily code-based. Questions, comments, criticisms wel
 - What if I want to know whether a long running routine actually ran, is still running, or if it aborted?
 - What about restricting the number of concurrent routines that can run for a specific purpose?
 
-* Problem statement
+* Requirements
 
 - Attempt to provide a simple pattern for defining, managing and reporting on long running asynchronous tasks.
-- Full reporting includes reporting on status and error conditions.
-- Before we dive in, lets define a few key words and look at some early samples.
+- Report on status, error conditions, and timing.
+
+* Before we dive in, lets define a few key words and look at some early samples.
 
 * Pool
 
@@ -46,7 +47,7 @@ This talk is going to be heavily code-based. Questions, comments, criticisms wel
 
 
 * Pool example - main
-.play -edit pool/main.go /func main/,
+.play -edit pool/main.go /func main/, HL123
 
 * Pool example - worker
 .code pool/main.go /func worker/,17
@@ -59,7 +60,7 @@ This talk is going to be heavily code-based. Questions, comments, criticisms wel
 .code worker/main.go /funcExecutor/,15
 
 * Workers Evolved - main
-.play -edit worker/main.go /func main/,
+.play -edit worker/main.go /func main/, HL123
 
 * Scheduler: Tasks and Jobs (Workers Evolved)
 - Workers have been incorporated into a Task which encapsulates the data and underlying routine that can be execetued.
@@ -98,7 +99,7 @@ This talk is going to be heavily code-based. Questions, comments, criticisms wel
 
 - Priority queuing
 - Restarting/requeuing/aborting an execution
-- Fix Executor strategy to better hide execution details, or remove altogether
+- Rewrite various areas - fix Executor strategy to better hide execution details, or remove altogether
 
 .image images/flying.png
 

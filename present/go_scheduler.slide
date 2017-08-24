@@ -1,5 +1,5 @@
 go-scheduler
-A Go library to manage and report on concurrent routines.
+A Go library to manage concurrent routines.
 24 Aug 2017
 Tags: go, channels, scheduling
 
@@ -22,7 +22,7 @@ This talk is going to be heavily code-based. Questions, comments, criticisms wel
 
 * Concurrency
 
-- Concurrency in Go is elegant and simple
+- Concurrency in Go is elegant and simple.
 - To run a function concurrently prepend the `go` keyword to a function.
 - Channels make it straightforward to converse between concurrently running goroutines.
 

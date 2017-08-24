@@ -59,23 +59,12 @@ func NewCustomScheduler(numExecutors int, repository JobRepository, executorStra
 }
 
 func (s *Scheduler) ScheduleNow(task *Task) (Job, error) {
-	if task == nil {
-		return Job{}, errors.New("Task was empty")
-	}
-	job := NewJob(task, time.Now())
-	if err := s.repository.Save(job); err != nil {
-		return Job{}, err
-	}
-	s.jobChan <- job
-	return job, nil
+	return s.Schedule(task, time.Now())
 }
 
 func (s *Scheduler) Schedule(task *Task, scheduledOn time.Time) (Job, error) {
 	if task == nil {
 		return Job{}, errors.New("Task was empty")
-	}
-	if time.Now().After(scheduledOn) {
-		return Job{}, errors.New("Schedule time is in the past")
 	}
 	job := NewJob(task, scheduledOn)
 	if err := s.repository.Save(job); err != nil {

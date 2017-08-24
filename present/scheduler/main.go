@@ -54,6 +54,6 @@ func main() {
 func printJobs(jobIDs []string, s *scheduler.Scheduler) {
 	for _, id := range jobIDs {
 		j, _ := s.JobStatus(id)
-		fmt.Printf("[%s] %s\n\tScheduled: %v Started: %v, Completed: %v\n", j.ID, j.Status, j.ScheduledOn, j.StartedOn, j.CompletedOn)
+		fmt.Printf("[%s] %s\n\tScheduled: %v\n\tStarted: %v\n\tCompleted: %v\n", j.ID, j.Status, j.ScheduledOn, j.StartedOn, j.CompletedOn)
 	}
 }

@@ -79,16 +79,20 @@ This talk is going to be heavily code-based. Questions, comments, criticisms wel
 
 * Scheduler
 
-.code ../scheduler.go /func NewCustomScheduler/,55
+.code ../scheduler.go /func NewCustomScheduler/,60
 
 * Scheduler functions
 
-.code ../scheduler.go /ScheduleNow/,
+.code ../scheduler.go /ScheduleNow/,79
 
 * Executor
 
 .code ../executor.go /type Executor/,
 .code ../job_repository.go /type JobRepository/,/}/
+
+* Lets see it in action
+
+.play -edit ./scheduler/main.go /func main/,
 
 * Enhancements
 

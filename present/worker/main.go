@@ -24,19 +24,15 @@ func main() {
 			fmt.Println("Done processing function", cp+1)
 		}
 	}
-
 	funcChan := make(chan func(), 10)
 	wg := new(sync.WaitGroup)
-
 	for i := 0; i < 10; i++ {
 		wg.Add(1)
 		go funcExecutor(funcChan, wg)
 	}
-
 	for _, f := range funcs {
 		funcChan <- f
 	}
-
 	close(funcChan)
 	fmt.Println("Waiting")
 	wg.Wait()

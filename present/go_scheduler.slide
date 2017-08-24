@@ -97,6 +97,8 @@ This talk is going to be heavily code-based. Questions, comments, criticisms wel
 
 * Enhancements
 
+This library is still a ways away from being usable.
+
 - Priority queuing
 - Restarting/requeuing/aborting an execution
 - Rewrite various areas - fix Executor strategy to better hide execution details, or remove altogether

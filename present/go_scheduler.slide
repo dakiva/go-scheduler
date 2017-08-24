@@ -42,8 +42,8 @@ This talk is going to be heavily code-based. Questions, comments, criticisms wel
 
 - A constrained, managed set of resources that are kept ready for use. This can be a set of database connections, large objects, file handles, etc. In our case we are going to manage goroutines.
 
-- A worker is simply a routine running concurrently that executes a unit of work and can report status.
-- A pool can be easily backed by a buffered channel
+- A worker is simply a routine running concurrently that executes a unit of work.
+- A pool can be easily backed by a buffered channel.
 
 
 * Pool example - main
@@ -93,7 +93,7 @@ This talk is going to be heavily code-based. Questions, comments, criticisms wel
 
 * Lets see it in action
 
-.play -edit ./scheduler/main.go /func main/,
+.play -edit ./scheduler/main.go /func main/,/Sleep/
 
 * Enhancements
 

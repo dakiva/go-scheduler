@@ -41,9 +41,7 @@ func main() {
 		currentJobIDs = append(currentJobIDs, job.ID)
 	}
 	time.Sleep(1)
-	fmt.Println("Running Jobs")
 	printJobs(currentJobIDs, s)
-	fmt.Println("Future Jobs")
 	printJobs(futureJobIDs, s)
 	time.Sleep(4 * time.Second)
 	fmt.Println("Future Jobs after 4s")
@@ -54,6 +52,6 @@ func main() {
 func printJobs(jobIDs []string, s *scheduler.Scheduler) {
 	for _, id := range jobIDs {
 		j, _ := s.JobStatus(id)
-		fmt.Printf("[%s] %s\n\tScheduled: %v\n\tStarted: %v\n\tCompleted: %v\n", j.ID, j.Status, j.ScheduledOn, j.StartedOn, j.CompletedOn)
+		fmt.Printf("[%s] %s\n", j.ID, j.Status)
 	}
 }

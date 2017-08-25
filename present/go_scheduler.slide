@@ -112,6 +112,7 @@ This library is still a ways away from being usable.
 - Priority queuing
 - Restarting/requeuing/aborting an execution
 - Rewrite various areas - fix Executor strategy to better hide execution details, or remove altogether
+- Update scheduling logic to poll against the repository. Expose finding jobs by status. For perisistent repositories, this can allow for resuming jobs on process crash.
 
 .image images/flying.png
 
